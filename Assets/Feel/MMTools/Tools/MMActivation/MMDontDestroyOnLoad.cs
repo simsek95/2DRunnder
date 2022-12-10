@@ -12,7 +12,6 @@ namespace MoreMountains.Tools
 		/// </summary>
 		protected void Awake()
 		{
-
 			DontDestroyOnLoad(this.gameObject);
 		}
 	}    

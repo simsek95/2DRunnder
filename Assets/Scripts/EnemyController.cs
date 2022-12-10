@@ -19,7 +19,6 @@ public class EnemyController : MonoBehaviour
 
     Rigidbody2D rb;
     Health health;
-
     private void Awake()
     {
         attackScript = GetComponent<AttackScript>();
@@ -128,7 +127,6 @@ public class EnemyController : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f,whatIsGround);
         if (hit.collider == null)
             i = false;
-
         return i;
     }
 
