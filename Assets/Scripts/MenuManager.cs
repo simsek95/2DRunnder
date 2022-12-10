@@ -37,6 +37,7 @@ public class MenuManager : MonoBehaviour
         if(shopOpenConfirmation != null)
         {
             allLevels.Add (shopOpenConfirmation);
+
         }
 
 
