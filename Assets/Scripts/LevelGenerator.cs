@@ -53,12 +53,12 @@ public class LevelGenerator : MonoBehaviour
     void GenerateLevelGround()
     {
         DestroyOldGround();
-        levelBrickAmount = Random.Range(3,10);
+        GenerateNewCount();
 
         Transform connectPoint = null;
         for (int i = 0; i < levelBrickAmount; i++)
         {
-            Transform newPiece = Instantiate(groundPiece,transform).transform;
+            Transform newPiece = Instantiate(groundPiece, transform).transform;
 
             if (connectPoint != null)
                 newPiece.transform.position = connectPoint.position;
@@ -70,6 +70,12 @@ public class LevelGenerator : MonoBehaviour
         }
         PlaceExitOnLastGround();
         PlaceWalls();
+    }
+
+    private void GenerateNewCount()
+    {
+        levelBrickAmount = Random.Range(3, 10);
+        DebugInfo.instance.UpdateGroundLentgh(levelBrickAmount);
     }
 
     void PlaceExitOnLastGround()
@@ -91,7 +97,7 @@ public class LevelGenerator : MonoBehaviour
 
     void PlaceWalls()
     {
-        for (int i = 0; i < levelBrickAmount-1; i++)
+        for (int i = 1; i < levelBrickAmount-1; i++)
         {
             int groundPieceScaleX = Mathf.RoundToInt(groundpieces[i].localScale.x);
             for(int k =0; k < groundPieceScaleX; k+=3)
@@ -106,7 +112,7 @@ public class LevelGenerator : MonoBehaviour
     bool yesNo()
     {
         float i = Random.value;
-        return (i < 0.3f);
+        return (i < 0.2f);
     }
 
 }

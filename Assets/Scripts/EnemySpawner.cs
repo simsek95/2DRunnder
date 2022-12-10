@@ -67,5 +67,8 @@ public class EnemySpawner : MonoBehaviour
     {
         totalEnemyAmount = newAmount;
         alreadySpawnedEnemies = 0;
+
+        DebugInfo.instance.UpdateSpawnedCount(0);
+        DebugInfo.instance.UpdateTotalCount(newAmount);
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     AttackScript attackScript;
+
     private void Awake()
     {
         attackScript = GetComponent<AttackScript>();

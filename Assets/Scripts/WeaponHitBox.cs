@@ -25,18 +25,20 @@ public class WeaponHitBox : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.TryGetComponent<MeleeWeapon>(out MeleeWeapon weapon) && weapon.hitBox.enabled==true) 
-        {
-            FeelManager.instance.SmallCameraShake();
-            EnemyController enemy = weapon.transform.GetComponentInParent<EnemyController>();
+        //if (collision.transform.TryGetComponent<Weapon>(out Weapon weapon) && weapon.hitBox.enabled==true) 
+        //{
+        //    FeelManager.instance.SmallCameraShake();
+        //    EnemyController enemy = weapon.transform.GetComponentInParent<EnemyController>();
 
-            //DETACH
-            //if (enemy != null && enemy.GetComponent<Health>().hp < 2)
-            //    weapon.Detach();
+        //    //DETACH
+        //    //if (enemy != null && enemy.GetComponent<Health>().hp < 2)
+        //    //    weapon.Detach();
 
-        }
+        //}
+        // else
 
-          else  if ( collision.transform.TryGetComponent<Health>(out Health health))
+
+        if (collision.transform.TryGetComponent<Health>(out Health health))
         
             health.TakeDamage(dmg,transform.position);
         }

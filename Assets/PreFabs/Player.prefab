@@ -476,7 +476,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startWeapon: {fileID: 395064271250836680}
-  attackAnim_Name: Slash
 --- !u!114 &395064272972496613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,6 +517,7 @@ MonoBehaviour:
   maxHP: 5
   dieEffect: {fileID: 532475555984434721, guid: deed4bd349945d64084ed6155e429c10, type: 3}
   bloodEffect: {fileID: 5924100743508790633, guid: 0a055275c72ece54c9cf426bda58dbde, type: 3}
+  healthBar: {fileID: 0}
 --- !u!1001 &2687746307554334426
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -604,6 +604,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 395064271575866418}
     m_Modifications:
+    - target: {fileID: 3102565218063137749, guid: 3756bfa85ea634043a36af590c0a82a1, type: 3}
+      propertyPath: attackAnim_Name
+      value: Slash
+      objectReference: {fileID: 0}
     - target: {fileID: 3102565218063137754, guid: 3756bfa85ea634043a36af590c0a82a1, type: 3}
       propertyPath: m_RootOrder
       value: 0
