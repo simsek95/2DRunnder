@@ -15,6 +15,10 @@ public class OpenMenuAtTrigger : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
+        {
+
+            MenuManager.instance.OpenMenu(MenuManager.instance.HUD);
             menuToOpen.SetActive(false);
+        }
     }
 }

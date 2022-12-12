@@ -6,12 +6,18 @@ public class WeaponHitBox : MonoBehaviour
 {
  
     Collider2D hitBox;
-    [SerializeField] int dmg = 1;
+    int dmg = 1;
 
     private void Awake() { 
         hitBox = GetComponent<Collider2D>();
         DeactivateHitBox();
     }
+
+    public void SetDamage(int i)
+    {
+        dmg = i;
+    }
+
     public void ActivateHitBox()
     {
         hitBox.enabled = true;

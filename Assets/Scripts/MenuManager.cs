@@ -9,7 +9,8 @@ public class MenuManager : MonoBehaviour
     public GameObject StartRunConformationMenu;
     public GameObject shopMenu;
     public GameObject shopOpenConfirmation;
-    List<GameObject> allLevels;
+    public GameObject HUD;
+    List<GameObject> allMenus;
 
     public static MenuManager instance;
 
@@ -23,20 +24,25 @@ public class MenuManager : MonoBehaviour
     {
         GameManager.OnLevelDone += OpenLevelFinishedMenu;
 
-        allLevels = new List<GameObject>();
+        allMenus = new List<GameObject>();
 
         if(levelDoneMenu != null)
-            allLevels.Add(levelDoneMenu);
+            allMenus.Add(levelDoneMenu);
 
         if(StartRunConformationMenu != null)
-            allLevels.Add (StartRunConformationMenu);
+            allMenus.Add (StartRunConformationMenu);
 
         if (shopMenu != null)
-            allLevels.Add(shopMenu);
+            allMenus.Add(shopMenu);
 
         if(shopOpenConfirmation != null)
         {
-            allLevels.Add (shopOpenConfirmation);
+            allMenus.Add (shopOpenConfirmation);
+
+        }
+        if (HUD != null)
+        {
+            allMenus.Add(HUD);
 
         }
 
@@ -45,7 +51,7 @@ public class MenuManager : MonoBehaviour
 
     public void OpenMenu(GameObject menu)
     {
-        foreach (GameObject level in allLevels)
+        foreach (GameObject level in allMenus)
         {
             if (level == menu)
                 level.SetActive(true);
@@ -55,7 +61,7 @@ public class MenuManager : MonoBehaviour
 
     public void CloseAllMenus()
     {
-        foreach (GameObject level in allLevels)
+        foreach (GameObject level in allMenus)
         {
           level.SetActive(false);
         }

@@ -464,6 +464,7 @@ MonoBehaviour:
   maxHP: 2
   dieEffect: {fileID: 532475555984434721, guid: deed4bd349945d64084ed6155e429c10, type: 3}
   bloodEffect: {fileID: 5924100743508790633, guid: 0a055275c72ece54c9cf426bda58dbde, type: 3}
+  healthBar: {fileID: 0}
 --- !u!114 &7366587247877620964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,6 +483,9 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 1
+  whatIsEnemy:
+    serializedVersion: 2
+    m_Bits: 512
   initialState: 0
 --- !u!70 &7366587247877620970
 CapsuleCollider2D:
@@ -526,7 +530,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startWeapon: {fileID: 5563606570379407891}
-  attackAnim_Name: Slash
+  currentAmmoText: {fileID: 0}
+  totalAmmoText: {fileID: 0}
 --- !u!1001 &7366587247510519020
 PrefabInstance:
   m_ObjectHideFlags: 0

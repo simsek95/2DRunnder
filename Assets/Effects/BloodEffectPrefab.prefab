@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationName: BloodEffect
+  lifeTime: 0.3
 --- !u!212 &9056352706686025536
 SpriteRenderer:
   m_ObjectHideFlags: 0

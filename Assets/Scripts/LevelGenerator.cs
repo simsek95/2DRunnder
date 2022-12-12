@@ -9,16 +9,23 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] GameObject groundPiece, exitPiece, wallPiece;
 
 
-   public int enemyCount { get; private set; } = 0;
-   public int levelBrickAmount { get; private set; } = 1;
+   [SerializeField] int enemyCount = 0;
+
+   [SerializeField] TableSO groundPieceTable;
+    Dictionary<int, int> table;
+
+    int levelBrickAmount = 1;
 
     List<Transform> groundpieces;
+    public static int currentLevel = 0;
 
     private void Awake()
     {
         if (instance == null) instance = this;
         else return;
         groundpieces = new List<Transform>();
+
+        InitializeTable();
     }
 
     private void Start()
@@ -26,10 +33,17 @@ public class LevelGenerator : MonoBehaviour
         SceneManager.sceneLoaded += GenerateLevel;
     }
 
-    private void Update()
+    void InitializeTable()
     {
-       // if (Input.GetKeyDown(KeyCode.Space)) GenerateLevel();
+        table = new Dictionary<int, int>();
+        for (int i = 0; i < groundPieceTable.keyValuePairs.Count; i++)
+        {
+            int key = groundPieceTable.keyValuePairs[i].key;
+            int value = groundPieceTable.keyValuePairs[i].value;
+            table.Add(key, value);
+        }
     }
+
 
     public void GenerateLevel(Scene scene, LoadSceneMode mode)
     {
@@ -62,7 +76,8 @@ public class LevelGenerator : MonoBehaviour
 
             if (connectPoint != null)
                 newPiece.transform.position = connectPoint.position;
-            else newPiece.transform.position = new Vector2(-10, -5);
+
+            else newPiece.transform.position = new Vector2(-20, -5);
 
             connectPoint = newPiece.transform.GetChild(0);
 
@@ -74,7 +89,8 @@ public class LevelGenerator : MonoBehaviour
 
     private void GenerateNewCount()
     {
-        levelBrickAmount = Random.Range(3, 10);
+        //levelBrickAmount = Random.Range(10, 30);
+        levelBrickAmount = table[currentLevel];
         DebugInfo.instance.UpdateGroundLentgh(levelBrickAmount);
     }
 
@@ -114,5 +130,13 @@ public class LevelGenerator : MonoBehaviour
         float i = Random.value;
         return (i < 0.2f);
     }
+
+
+
+}
+
+public struct LevelDictionary
+{
+  Dictionary<int, int> goundLengthStages;
 
 }

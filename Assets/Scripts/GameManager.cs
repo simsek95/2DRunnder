@@ -27,14 +27,18 @@ public class GameManager : MonoBehaviour
 
     public void StartRun()
     {
+        LevelGenerator.currentLevel = 0;
         SceneManager.LoadScene(1);
         MenuManager.instance.CloseAllMenus();
+        MenuManager.instance.OpenMenu(MenuManager.instance.HUD);
     }
 
     public void ContinueRun()
     {
+        LevelGenerator.currentLevel++;
         SceneManager.LoadScene(1);
         MenuManager.instance.CloseAllMenus();
+        MenuManager.instance.OpenMenu(MenuManager.instance.HUD);
     }
 
 
@@ -43,4 +47,5 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(0);
         MenuManager.instance.CloseAllMenus();
     }
+
 }

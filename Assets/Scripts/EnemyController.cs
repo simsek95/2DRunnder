@@ -1,16 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    Transform player;
+    Transform target;
     [SerializeField] float attackRadius = 3f, attackRatio = 1.5f;
     float timeSinceLastAttack = 0;
 
     [SerializeField] float walkSpeed = 3f;
     [SerializeField] LayerMask whatIsGround;
+    [SerializeField] LayerMask whatIsEnemy;
 
     State state;
     [SerializeField] State initialState = State.chasing;
@@ -28,7 +30,7 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
-        player = FindObjectOfType<PlayerMove>().transform;
+        target = FindObjectOfType<PlayerMove>().transform;
         SetState(initialState);
 
         health= GetComponent<Health>();
@@ -38,13 +40,17 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(PlayerIsInRange()) rb.velocity = Vector3.zero;
 
         switch (state)
         {
             case State.chasing:
-                GoToPlayer();
+                if(!EnemyIsBetweenPlayerAndTooClose())
+
+                    if(!PlayerIsInRange()) GoToPlayer();
+                    else rb.velocity = Vector3.zero;
+
                 if (CanAttack()&&PlayerIsInRange() ) SetState(State.attacking); 
+
                 break;
 
             case State.attacking:
@@ -56,9 +62,7 @@ public class EnemyController : MonoBehaviour
 
     }
 
-   
-   
-
+ 
     void SetState(State newState)
     {
         state = newState;
@@ -103,9 +107,41 @@ public class EnemyController : MonoBehaviour
         rb.velocity = velocity;
     }
 
+    private bool EnemyIsBetweenPlayerAndTooClose()
+    {
+        Vector2 rayOrigin =  (Vector2)transform.position + (Vector2)Vector2.up;
+        Vector2 rayDirection = (Vector2)target.transform.position - rayOrigin;
+        rayDirection.y = 0;
+
+        RaycastHit2D[] hit = Physics2D.RaycastAll(rayOrigin, rayDirection,Mathf.Infinity,whatIsEnemy);
+
+        if (hit != null && hit.Length > 1)
+        {
+            Debug.DrawLine(hit[1].point, rayOrigin, Color.red);
+            if (StopIfTooClose(hit[1].transform))
+                return true;
+            else return false;
+
+        }
+        else return false;
+
+        bool StopIfTooClose(Transform hit)
+        {
+            float distance = Vector2.Distance(hit.position, transform.position);
+            if (distance < 2)
+            {
+                rb.velocity = Vector2.zero;
+                return true;
+            }
+            else return false;
+        }
+
+    }
+
+
     private bool PlayerIsInRange()
     {
-        float distance = Vector2.Distance(transform.position, player.position);
+        float distance = Vector2.Distance(transform.position, target.position);
         return distance < attackRadius;
     }
 
@@ -113,7 +149,7 @@ public class EnemyController : MonoBehaviour
     {
         Vector2 dir;
 
-        dir = player.position - transform.position;
+        dir = target.position - transform.position;
         dir.Normalize();
 
         dir.y = 0;
