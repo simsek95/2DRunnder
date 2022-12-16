@@ -183,11 +183,14 @@ public class EnemyController : MonoBehaviour
 
     void Die()
     {
+        DropCash();
         Destroy(this.gameObject);
     }
 
-
-
+    private static void DropCash()
+    {
+        FindObjectOfType<Inventory>().ChangeCash(+1);
+    }
 
     enum State
     {

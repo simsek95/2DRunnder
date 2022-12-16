@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemySpawner : MonoBehaviour
 {
     Transform player;
     [SerializeField] Transform spawnPointL;
     [SerializeField] Transform spawnPointR;
-    [SerializeField] int totalEnemyAmount = 5;
-    float alreadySpawnedEnemies = 0;
-    [SerializeField] float maxTimeBetweenSpawn = 5;
     [SerializeField] GameObject enemyPrefab;
 
     public static EnemySpawner instance;
@@ -20,9 +19,9 @@ public class EnemySpawner : MonoBehaviour
         else return;
     }
 
-    public void Initialize(int newAmount)
+    public void Initialize()
     {
-        SetTotalEnemyCount(newAmount);
+        print("initial");
         FindPlayer();
         StartCoroutine(Spawn());
     }
@@ -36,20 +35,20 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator Spawn()
     {
-
-        if (alreadySpawnedEnemies >= totalEnemyAmount) yield return null;
-        else
+        print("spawn");
+        if (SceneManager.GetActiveScene().buildIndex != 0)
         {
-        Vector2 spawnPoint;
-        if (yesNo()) spawnPoint = spawnPointL.position;
-        else spawnPoint = spawnPointR.position;
+            Vector2 spawnPoint;
+            if (yesNo()) spawnPoint = spawnPointL.position;
+            else spawnPoint = spawnPointR.position;
 
-        Instantiate(enemyPrefab, spawnPoint, Quaternion.identity);
-        alreadySpawnedEnemies++;
-        
-        yield return new WaitForSeconds(maxTimeBetweenSpawn);
-        StartCoroutine(Spawn());
+            Instantiate(enemyPrefab, spawnPoint, Quaternion.identity);
+            print("enemyspawned");
+            yield return new WaitForSeconds(LevelGenerator.instance.SpawnTimeForEnemy());
+            StartCoroutine(Spawn());
         }
+        else yield return null;
+       
     }
 
     bool yesNo()
@@ -63,12 +62,5 @@ public class EnemySpawner : MonoBehaviour
         player = GameObject.FindWithTag("Player").transform;
     }
 
-    void SetTotalEnemyCount(int newAmount)
-    {
-        totalEnemyAmount = newAmount;
-        alreadySpawnedEnemies = 0;
-
-        DebugInfo.instance.UpdateSpawnedCount(0);
-        DebugInfo.instance.UpdateTotalCount(newAmount);
-    }
+ 
 }

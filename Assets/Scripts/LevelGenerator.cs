@@ -9,59 +9,61 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] GameObject groundPiece, exitPiece, wallPiece;
 
 
-   [SerializeField] int enemyCount = 0;
-
-   [SerializeField] TableSO groundPieceTable;
-    Dictionary<int, int> table;
+   [SerializeField] TableSO groundPieceTableSO, enemySpawnTimeTableSO;
 
     int levelBrickAmount = 1;
 
     List<Transform> groundpieces;
     public static int currentLevel = 0;
 
+    float passedTimeSinceRunStart = 0;
+
     private void Awake()
     {
         if (instance == null) instance = this;
         else return;
         groundpieces = new List<Transform>();
+    }
 
-        InitializeTable();
+    private void Update()
+    {
+        passedTimeSinceRunStart += Time.deltaTime;
+        if (Input.GetMouseButtonDown(1)) SpawnTimeForEnemy();
     }
 
     private void Start()
     {
         SceneManager.sceneLoaded += GenerateLevel;
+        GameManager.OnStartRun += () => passedTimeSinceRunStart = 0;
     }
 
-    void InitializeTable()
+
+    public float SpawnTimeForEnemy()
     {
-        table = new Dictionary<int, int>();
-        for (int i = 0; i < groundPieceTable.keyValuePairs.Count; i++)
+        float spawnTime = 0;
+        for (int i = 0; i < enemySpawnTimeTableSO.keyValuePairs.Count; i++)
         {
-            int key = groundPieceTable.keyValuePairs[i].key;
-            int value = groundPieceTable.keyValuePairs[i].value;
-            table.Add(key, value);
+            if (i == 0) spawnTime = enemySpawnTimeTableSO.keyValuePairs[0].value;
+            else
+            if (passedTimeSinceRunStart > enemySpawnTimeTableSO.keyValuePairs[i].key)
+            {
+                spawnTime = enemySpawnTimeTableSO.keyValuePairs[i].value;
+            }
         }
-    }
 
+
+        print("passed :"+ passedTimeSinceRunStart + "spawnTImeMax: "+spawnTime);
+        return spawnTime;
+    }
 
     public void GenerateLevel(Scene scene, LoadSceneMode mode)
     {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        GenerateLevelGround();
+        if (SceneManager.GetActiveScene().buildIndex != 0)
         {
-            EnemySpawner.instance.Initialize(0);
+            EnemySpawner.instance.Initialize();
             return;
         }
-        GenerateEnemyCount();
-        GenerateLevelGround();
-    }
-    void GenerateEnemyCount()
-    {
-      int oldEnemyCount = enemyCount;
-      enemyCount = Random.Range(Mathf.RoundToInt(oldEnemyCount*1.3f)+1, (oldEnemyCount*2)+3);
-        oldEnemyCount = enemyCount;
-  
-        EnemySpawner.instance.Initialize(enemyCount);
     }
 
     void GenerateLevelGround()
@@ -73,11 +75,12 @@ public class LevelGenerator : MonoBehaviour
         for (int i = 0; i < levelBrickAmount; i++)
         {
             Transform newPiece = Instantiate(groundPiece, transform).transform;
+            int pieceLengthInUnityUnits = 10;
 
             if (connectPoint != null)
                 newPiece.transform.position = connectPoint.position;
 
-            else newPiece.transform.position = new Vector2(-20, -5);
+            else newPiece.transform.position = new Vector2(-2*pieceLengthInUnityUnits, -5);
 
             connectPoint = newPiece.transform.GetChild(0);
 
@@ -90,7 +93,7 @@ public class LevelGenerator : MonoBehaviour
     private void GenerateNewCount()
     {
         //levelBrickAmount = Random.Range(10, 30);
-        levelBrickAmount = table[currentLevel];
+        levelBrickAmount = Mathf.RoundToInt( groundPieceTableSO.keyValuePairs[currentLevel].value);
         DebugInfo.instance.UpdateGroundLentgh(levelBrickAmount);
     }
 
@@ -113,7 +116,7 @@ public class LevelGenerator : MonoBehaviour
 
     void PlaceWalls()
     {
-        for (int i = 1; i < levelBrickAmount-1; i++)
+        for (int i = 2; i < levelBrickAmount-1; i++)
         {
             int groundPieceScaleX = Mathf.RoundToInt(groundpieces[i].localScale.x);
             for(int k =0; k < groundPieceScaleX; k+=3)
@@ -132,11 +135,5 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-
-}
-
-public struct LevelDictionary
-{
-  Dictionary<int, int> goundLengthStages;
 
 }

@@ -60,9 +60,7 @@ public class Health : MonoBehaviour
             OnDie();
         else
         {
-            Debug.LogError("no listener to Ondie, so i just destroy it");
             Destroy(this.gameObject);
-
         } 
     }
 
